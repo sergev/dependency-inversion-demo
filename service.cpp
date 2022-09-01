@@ -19,7 +19,7 @@ public:
     //
     // Constructor.
     //
-    service(client_interface &clnt) : client(clnt) { std::cout << "service allocated\n"; }
+    explicit service(client_interface &clnt) : client(clnt) { std::cout << "service allocated\n"; }
 
 private:
     client_interface &client;
