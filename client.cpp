@@ -1,39 +1,52 @@
-#include "client_interface.h"
+#include "service_interface.h"
 #include <iostream>
 
 //
 // Real client.
 //
 class client : public client_interface {
+private:
+    //
+    // Link to the service.
+    //
+    std::unique_ptr<service_interface> service;
+
 public:
     //
-    // Calls from the service to the client.
+    // Local call.
     //
-    void call_client() override { std::cout << "client called\n"; }
+    void do_the_job() override {
+        std::cout << "do the job\n";
+        service->call_service();
+    }
+
+    //
+    // Call back from the service to the client.
+    //
+    void call_client() override {
+        std::cout << "client called\n";
+    }
 
     //
     // Destructor.
     //
-    ~client() override { std::cout << "client deallocated\n"; }
+    ~client() override {
+        std::cout << "client deallocated\n";
+    }
 
     //
     // Constructor.
     //
-    client() { std::cout << "client allocated\n"; }
-
-    //
-    // Some other methods.
-    //
-    void do_the_job() { std::cout << "do the job\n"; service->call_service(); }
+    client()
+        : service(service_interface::make_service(*this)) {
+        std::cout << "client allocated\n";
+    }
 };
 
 //
-// Run the code.
+// Allocate a client.
 //
-int main()
+std::unique_ptr<client_interface> client_interface::make_client()
 {
-    client clnt;
-
-    clnt.do_the_job();
-    return 0;
+    return std::make_unique<client>();
 }

@@ -1,3 +1,4 @@
+#include "client_interface.h"
 #include <memory>
 
 //
@@ -13,11 +14,10 @@ public:
     //
     // Destructor.
     //
-    virtual ~service_interface() = 0;
-};
+    virtual ~service_interface() {}
 
-//
-// Allocate the service: global function.
-//
-class client_interface;
-std::unique_ptr<service_interface> make_service(client_interface &client);
+    //
+    // Factory to create a service: static method.
+    //
+    static std::unique_ptr<service_interface> make_service(client_interface &client);
+};
